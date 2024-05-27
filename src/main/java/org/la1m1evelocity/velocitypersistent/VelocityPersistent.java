@@ -1,6 +1,7 @@
 package org.la1m1evelocity.velocitypersistent;
 
 import com.google.inject.Inject;
+import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.event.player.KickedFromServerEvent;
 import com.velocitypowered.api.event.player.PlayerChooseInitialServerEvent;
 import com.velocitypowered.api.event.player.ServerConnectedEvent;
@@ -28,6 +29,7 @@ public class VelocityPersistent {
     private final Logger logger;
     @Getter
     private final ProxyServer proxy;
+
     String defaultServer;
     String kickText;
     String fallBack;
@@ -109,7 +111,11 @@ public class VelocityPersistent {
         bufferedWriter.close();
     }
     @Subscribe
-    public void Post(KickedFromServerEvent event) throws IOException {
-        if (String.valueOf(event.getServerKickReason()).equals("Optional.empty")) event.getPlayer().disconnect(Component.text("Ваш мир не запущен!"));
+    public void Post(KickedFromServerEvent event) {
+        if (String.valueOf(event.getServerKickReason()).equals("Optional.empty"))
+        {//if(reconnect) {
+            //WIP
+            event.getPlayer().disconnect(Component.text(kickText));
+        }
     }
 }

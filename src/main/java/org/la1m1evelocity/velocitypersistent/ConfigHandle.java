@@ -24,9 +24,9 @@ public class ConfigHandle {
                                     "default_server:WORLD1\n" +
                                     "//Text to display on kick\n" +
                                     "kick_text:Your server has not started yet!\n" +
-                                    "//allow players to join another server if the last server is offline? (This will override the last server)\n" +
+                                    "//allow players to join another server if the last server is offline? (This will override the last server) WORK IN PROGRESS, NOT ACTIVE\n" +
                                     "reconnect_to_active:false\n" +
-                                    "//server to reconect to if last is offline(might be lobby or another server, inactive if reconnect_to_active is false):\n" +
+                                    "//server to reconect to if last is offline(might be lobby or another server, inactive if reconnect_to_active is false) WORK IN PROGRESS, NOT ACTIVE:\n" +
                                     "fallback_server:LOBBY");
         bufferedWriter.close();
     }
