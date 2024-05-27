@@ -1,10 +1,10 @@
 package org.la1m1evelocity.velocitypersistent;
 
 import java.io.*;
-import java.util.Optional;
-
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class ConfigHandle {
     public static String[] cfgHandle () throws IOException {
+
         new File("plugins/VelocistyPersistent/").mkdirs();
         File configPath = new File("plugins/VelocistyPersistent/config.json");
         String [] config = new String[3];

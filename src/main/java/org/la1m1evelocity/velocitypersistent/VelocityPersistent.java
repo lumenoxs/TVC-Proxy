@@ -1,10 +1,8 @@
 package org.la1m1evelocity.velocitypersistent;
 
 import com.google.inject.Inject;
-import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.event.player.KickedFromServerEvent;
 import com.velocitypowered.api.event.player.PlayerChooseInitialServerEvent;
-import com.velocitypowered.api.event.player.ServerConnectedEvent;
 import com.velocitypowered.api.event.player.ServerPostConnectEvent;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.event.Subscribe;
@@ -17,14 +15,13 @@ import org.slf4j.Logger;
 
 import java.io.*;
 import java.util.*;
-
+@SuppressWarnings("ResultOfMethodCallIgnored")
 @Plugin(
         id = "persistentserver2_0",
         name = "PersistentServer2.0",
         version = "1.0-SNAPSHOT"
 )
 public class VelocityPersistent {
-    private final List<UUID> connectedPlayers = new ArrayList<>();
     @Getter
     private final Logger logger;
     @Getter
@@ -56,8 +53,8 @@ public class VelocityPersistent {
              this.fallBack = configData[3];
              logger.info(defaultServer);
              logger.info(kickText);
-             logger.info(String.valueOf(reconnect));
-             logger.info(fallBack);
+             //logger.info(String.valueOf(reconnect));
+             //logger.info(fallBack);
          }
 
     }
@@ -72,12 +69,11 @@ public class VelocityPersistent {
     @Subscribe
     public void preConnectEvent(PlayerChooseInitialServerEvent event) throws IOException {
         String UUID = (event.getPlayer().getUniqueId().toString());
-        logger.info(UUID);
-        logger.info(defaultServer);
+        //logger.info(UUID);
+        //logger.info(defaultServer);
         File lastServer = new File("PersistentServerData/"+UUID+".txt");
         String targetServer;
         if (!lastServer.exists()) {
-            logger.info("FileNotExists");
             FileWriter fileWriter = new FileWriter(lastServer);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             bufferedWriter.write(defaultServer);
@@ -91,9 +87,9 @@ public class VelocityPersistent {
             bufferedReader.close();
         }
         RegisteredServer target = proxy.getServer(targetServer).orElse(null);
-        logger.info(target.toString());
+        assert target != null;
         if (!proxy.getServer(targetServer).isPresent()) {
-//
+        logger.info(event.getPlayer().getUsername() + " Failed to connect to "+targetServer);
         }
         else {
 
