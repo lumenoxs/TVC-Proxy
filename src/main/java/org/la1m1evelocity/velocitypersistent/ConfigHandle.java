@@ -5,8 +5,8 @@ import java.io.*;
 public class ConfigHandle {
     public static String[] cfgHandle () throws IOException {
 
-        new File("plugins/VelocistyPersistent/").mkdirs();
-        File configPath = new File("plugins/VelocistyPersistent/config.json");
+        new File("plugins/VelocityPersistent/").mkdirs();
+        File configPath = new File("plugins/VelocityPersistent/config.json");
         String [] config = new String[3];
         if (!configPath.exists()) {
             configWrite(configPath);
@@ -20,13 +20,13 @@ public class ConfigHandle {
     public static void configWrite (File configPath) throws IOException {
         FileWriter fileWriter = new FileWriter(configPath);
         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-        bufferedWriter.write("//new players will connect to this server:\n" +
+        bufferedWriter.write("// New players will connect to this server\n" +
                                     "default_server:WORLD1\n" +
-                                    "//Text to display on kick\n" +
+                                    "// Message to display on kick when the server they tried to connect to is down\n" +
                                     "kick_text:Your server has not started yet!\n" +
-                                    "//allow players to join another server if the last server is offline? (This will override the last server) WORK IN PROGRESS, NOT ACTIVE\n" +
+                                    "// Allow players to join another server if their last server is offline (This will override the last server) WORK IN PROGRESS, NOT ACTIVE\n" +
                                     "reconnect_to_active:false\n" +
-                                    "//server to reconect to if last is offline(might be lobby or another server, inactive if reconnect_to_active is false) WORK IN PROGRESS, NOT ACTIVE:\n" +
+                                    "// Server to reconnect to if their last server is offline (e.g. lobby, this does nothing if reconnect_to_active is false) WORK IN PROGRESS, NOT ACTIVE\n" +
                                     "fallback_server:LOBBY");
         bufferedWriter.close();
     }
