@@ -51,8 +51,8 @@ public class VelocityPersistent {
              this.kickText = configData[1];
              this.reconnect = Boolean.parseBoolean(configData[2]);
              this.fallBack = configData[3];
-             logger.info(defaultServer);
-             logger.info(kickText);
+             logger.info("Default server: "+defaultServer);
+             logger.info("Kick message: "+kickText);
              //logger.info(String.valueOf(reconnect));
              //logger.info(fallBack);
          }
@@ -85,15 +85,15 @@ public class VelocityPersistent {
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             targetServer = bufferedReader.readLine();
             bufferedReader.close();
+            if (targetServer == null || targetServer.isBlank()) {
+                targetServer = defaultServer;
+            }
         }
-        RegisteredServer target = proxy.getServer(targetServer).orElse(null);
-        assert target != null;
-        if (!proxy.getServer(targetServer).isPresent()) {
-        logger.info(event.getPlayer().getUsername() + " Failed to connect to "+targetServer);
-        }
-        else {
-
-            event.setInitialServer(target);
+        Optional<RegisteredServer> target = proxy.getServer(targetServer);
+        if (target.isPresent()) {
+            event.setInitialServer(target.get());
+        } else {
+            logger.info(event.getPlayer().getUsername() + " Failed to connect to " + targetServer);
         }
     }
 
