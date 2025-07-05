@@ -17,9 +17,9 @@ import java.io.*;
 import java.util.*;
 @SuppressWarnings("ResultOfMethodCallIgnored")
 @Plugin(
-        id = "persistentserver2_0",
-        name = "PersistentServer2.0",
-        version = "1.0-SNAPSHOT"
+    id = "persistentserver2_0",
+    name = "PersistentServer2.0",
+    version = "1.1"
 )
 public class VelocityPersistent {
     @Getter
@@ -29,8 +29,6 @@ public class VelocityPersistent {
 
     String defaultServer;
     String kickText;
-    String fallBack;
-    boolean reconnect;
 
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) throws IOException {
@@ -38,23 +36,18 @@ public class VelocityPersistent {
         String [] configData;
          configData = ConfigHandle.cfgHandle();
          if (Objects.equals(configData[0], "0") && Objects.equals(configData[1], "0")){
+             logger.warn("EDIT THE VELOCITYPERSISTENT CONFIG AND RESTART");
+             logger.warn("EDIT THE VELOCITYPERSISTENT CONFIG AND RESTART");
+             logger.warn("EDIT THE VELOCITYPERSISTENT CONFIG AND RESTART");
              proxy.shutdown();
-             logger.info("EDIT THE VELOCITYPERSISTENT CONFIG AND RESTART");
-             logger.info("EDIT THE VELOCITYPERSISTENT CONFIG AND RESTART");
-             logger.info("EDIT THE VELOCITYPERSISTENT CONFIG AND RESTART");
-             logger.info("EDIT THE VELOCITYPERSISTENT CONFIG AND RESTART");
-             proxy.shutdown();
-         }
-         else {
+         } else {
 
              this.defaultServer = configData[0];
              this.kickText = configData[1];
              this.reconnect = Boolean.parseBoolean(configData[2]);
              this.fallBack = configData[3];
-             logger.info("Default server: "+defaultServer);
-             logger.info("Kick message: "+kickText);
-             //logger.info(String.valueOf(reconnect));
-             //logger.info(fallBack);
+             logger.info("Default server: " + defaultServer);
+             logger.info("Kick message: " + kickText);
          }
 
     }
@@ -66,11 +59,16 @@ public class VelocityPersistent {
 
         logger.info("Persistent Server Loaded!");
     }
+
     @Subscribe
     public void preConnectEvent(PlayerChooseInitialServerEvent event) throws IOException {
         String UUID = (event.getPlayer().getUniqueId().toString());
-        //logger.info(UUID);
-        //logger.info(defaultServer);
+
+        File dataDir = new File("PersistentServerData");
+        if (!dataDir.exists()) {
+            dataDir.mkdirs();
+        }
+
         File lastServer = new File("PersistentServerData/"+UUID+".txt");
         String targetServer;
         if (!lastServer.exists()) {
@@ -105,13 +103,5 @@ public class VelocityPersistent {
         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
         bufferedWriter.write(String.valueOf(event.getPlayer().getCurrentServer()).split("> ")[1].split("]")[0]);
         bufferedWriter.close();
-    }
-    @Subscribe
-    public void Post(KickedFromServerEvent event) {
-        if (String.valueOf(event.getServerKickReason()).equals("Optional.empty"))
-        {//if(reconnect) {
-            //WIP
-            event.getPlayer().disconnect(Component.text(kickText));
-        }
     }
 }
