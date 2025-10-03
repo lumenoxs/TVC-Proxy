@@ -17,8 +17,8 @@ import java.io.*;
 import java.util.*;
 @SuppressWarnings("ResultOfMethodCallIgnored")
 @Plugin(
-    id = "persistentserver2_0",
-    name = "PersistentServer2.0",
+    id = "TVCProxy",
+    name = "TVCProxy",
     version = "1.1"
 )
 public class VelocityPersistent {
@@ -34,22 +34,11 @@ public class VelocityPersistent {
     public void onProxyInitialization(ProxyInitializeEvent event) throws IOException {
         new File("PersistentServerData/").mkdirs();
         String [] configData;
-         configData = ConfigHandle.cfgHandle();
-         if (Objects.equals(configData[0], "0") && Objects.equals(configData[1], "0")){
-             logger.warn("EDIT THE VELOCITYPERSISTENT CONFIG AND RESTART");
-             logger.warn("EDIT THE VELOCITYPERSISTENT CONFIG AND RESTART");
-             logger.warn("EDIT THE VELOCITYPERSISTENT CONFIG AND RESTART");
-             proxy.shutdown();
-         } else {
-
-             this.defaultServer = configData[0];
-             this.kickText = configData[1];
-             this.reconnect = Boolean.parseBoolean(configData[2]);
-             this.fallBack = configData[3];
-             logger.info("Default server: " + defaultServer);
-             logger.info("Kick message: " + kickText);
-         }
-
+        configData = ConfigHandle.cfgHandle();
+        this.defaultServer = configData[0];
+        this.kickText = configData[1];
+        logger.info("Default server: " + defaultServer);
+        logger.info("Kick message: " + kickText);
     }
 
     @Inject
@@ -57,7 +46,7 @@ public class VelocityPersistent {
         this.proxy = proxy;
         this.logger = logger;
 
-        logger.info("Persistent Server Loaded!");
+        logger.info("TVC-Proxy Loaded!");
     }
 
     @Subscribe
@@ -91,7 +80,8 @@ public class VelocityPersistent {
         if (target.isPresent()) {
             event.setInitialServer(target.get());
         } else {
-            logger.info(event.getPlayer().getUsername() + " Failed to connect to " + targetServer);
+            logger.info(event.getPlayer().getUsername() + " failed to connect to " + targetServer  + " (server didnt exist)");
+            logger.info("Falling back to " + defaultServer + "...");
         }
     }
 
@@ -103,5 +93,22 @@ public class VelocityPersistent {
         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
         bufferedWriter.write(String.valueOf(event.getPlayer().getCurrentServer()).split("> ")[1].split("]")[0]);
         bufferedWriter.close();
+    }
+
+    @Subscribe
+    public void onKickedFromServer(KickedFromServerEvent event) {
+        Optional<Component> serverKickReason = event.getServerKickReason();
+
+        String serverKickReasonString = serverKickReason.get().toString();
+
+        String kickMessage = kickText.replace("%server%", event.getServer().getServerInfo().getName());
+
+        if (serverKickReason.isPresent()) {
+            kickMessage = kickMessage.replace("%reason%", serverKickReasonString);
+        } else {
+            kickMessage = kickMessage.replace("%reason%", "The server is currently down.");
+        }
+        
+        event.getPlayer().disconnect(Component.text(kickMessage));
     }
 }

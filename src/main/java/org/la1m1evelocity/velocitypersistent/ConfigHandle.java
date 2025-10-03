@@ -21,13 +21,9 @@ public class ConfigHandle {
         FileWriter fileWriter = new FileWriter(configPath);
         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
         bufferedWriter.write("// New players will connect to this server\n" +
-                                    "default_server:WORLD1\n" +
-                                    "// Message to display on kick when the server they tried to connect to is down\n" +
-                                    "kick_text:Your server has not started yet!\n" +
-                                    "// Allow players to join another server if their last server is offline (This will override the last server) WORK IN PROGRESS, NOT ACTIVE\n" +
-                                    "reconnect_to_active:false\n" +
-                                    "// Server to reconnect to if their last server is offline (e.g. lobby, this does nothing if reconnect_to_active is false) WORK IN PROGRESS, NOT ACTIVE\n" +
-                                    "fallback_server:LOBBY");
+                                    "default_server:windfall\n" +
+                                    "// Message to display on kick when the server they tried to connect to is down. Use %server% to replaced with the server they tried to connect to, and %reason% for the reason\n" +
+                                    "kick_text:Unable to connect to %server%: %reason%\n");
         bufferedWriter.close();
     }
     public static String[] configRead (File configPath) throws IOException {
@@ -41,6 +37,7 @@ public class ConfigHandle {
             configReturn[i]=value;
             i++;
         }
+        bufferedReader.close();
         return configReturn;
     }
 }
