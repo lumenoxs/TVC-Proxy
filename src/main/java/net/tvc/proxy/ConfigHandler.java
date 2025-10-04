@@ -36,6 +36,7 @@ public class ConfigHandler {
             "forced_host_mc.truevanilla.net:default\n" +
             "forced_host_lobby.truevanilla.net:lobby\n" +
             "forced_host_core.truevanilla.net:core\n" +
+            "forced_host_arena.truevanilla.net:arena\n" +
             "forced_host_windfall.truevanilla.net:windfall\n"
         );
         bufferedWriter.close();
