@@ -82,6 +82,12 @@ public class ProxyInstance {
     public void preConnectEvent(PlayerChooseInitialServerEvent event) throws IOException {
         // this is the only function that ill be commenting as i myself dont understand it so dont get used to it
         
+        // whether the player is using a forced host or not
+        Boolean[] forcedHost = new Boolean[]{false};
+
+        // server to connect the player to
+        String[] targetServerName = new String[1];
+
         // forced hosts
         event.getPlayer().getVirtualHost().ifPresent(address -> {
             // the host the player connected with
@@ -98,7 +104,8 @@ public class ProxyInstance {
                     if (forcedServer.isPresent()) {
                         event.setInitialServer(forcedServer.get());
                         logger.info("Player " + event.getPlayer().getUsername() + " connected using forced host " + host + " to server " + forcedServerName);
-                        return;
+                        forcedHost[0] = true;
+                        targetServerName[0] = forcedServerName;
                     } else {
                         // server didnt exist :(
                         logger.info("Player " + event.getPlayer().getUsername() + " tried to connect using forced host " + host + " to server " + forcedServerName + ", but the server didnt exist");
@@ -119,11 +126,10 @@ public class ProxyInstance {
 
         // the file storing the players last server
         File playerDataFile = new File("PersistentServerData/"+UUID+".txt");
-        // server to connect the player to
-        String targetServerName;
 
         // if file doesnt exist (new player)
-        if (!playerDataFile.exists()) {
+        if (forcedHost[0]) {}
+        else if (!playerDataFile.exists()) {
             // idk how this works something to do with writing to files ask La1m1e on github
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(playerDataFile));
             // write the default server to the file
@@ -131,33 +137,34 @@ public class ProxyInstance {
             // close the writer
             bufferedWriter.close();
             // set the target server to the default server
-            targetServerName = defaultServer;
+            targetServerName[0] = defaultServer;
             logger.info("This is the first time the player " + event.getPlayer().getUsername() + " connects!");
             logger.info("Defaulting to " + defaultServer + "...");
+        // player has already connected before
         } else {
-            // player has already connected before
             // magic!1!!111!
             BufferedReader bufferedReader = new BufferedReader(new FileReader(playerDataFile));
             // get the last server from the file
-            targetServerName = bufferedReader.readLine();
+            targetServerName[0] = bufferedReader.readLine();
             // close the reader
             bufferedReader.close();
             // if for whatever reason its empty, set target server to default server
-            if (targetServerName == null || targetServerName.isBlank()) {
-                targetServerName = defaultServer;
+            if (targetServerName[0] == null || targetServerName[0].isBlank()) {
+                targetServerName[0] = defaultServer;
                 logger.info("The player " + event.getPlayer().getUsername() + " had an empty/null data file.");
                 logger.info("Falling back to " + defaultServer + "...");
             }
         }
         // get the target server from the target server name
-        Optional<RegisteredServer> targetServer = proxy.getServer(targetServerName);
+        Optional<RegisteredServer> targetServer = proxy.getServer(targetServerName[0]);
+        if (forcedHost[0]) {}
         // if the server exists
-        if (targetServer.isPresent()) {
-            logger.info("Connecting " + event.getPlayer().getUsername() + " to " + targetServerName + "...");
+        else if (targetServer.isPresent()) {
+            logger.info("Connecting " + event.getPlayer().getUsername() + " to " + targetServerName[0] + "...");
             event.setInitialServer(targetServer.get());
+        // server didnt exist :(
         } else {
-            // server didnt exist :(
-            logger.info(event.getPlayer().getUsername() + " failed to connect to " + targetServerName  + " (server didnt exist)");
+            logger.info(event.getPlayer().getUsername() + " failed to connect to " + targetServerName[0]  + " (server didnt exist)");
         }
     }
 
