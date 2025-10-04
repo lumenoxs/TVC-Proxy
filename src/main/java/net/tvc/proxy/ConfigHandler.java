@@ -6,14 +6,17 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class ConfigHandler {
     public static Object[] getConfig() throws IOException {
-        new File("plugins/VelocityPersistent/").mkdirs();
-        File configPath = new File("/plugins/VelocityPersistent/config.json");
+        Path dataDirectory = ProxyInstance.getDataDirectory();
+        new File(dataDirectory.toAbsolutePath().toString()).mkdirs();
+        
+        File configPath = new File(dataDirectory.toAbsolutePath().toString()+"config.json");
         Object[] config = new Object[2];
         if (!configPath.exists()) configWrite(configPath);
         config = configRead(configPath);

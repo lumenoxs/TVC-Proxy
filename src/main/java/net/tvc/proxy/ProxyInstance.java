@@ -7,6 +7,7 @@ import com.velocitypowered.api.event.player.ServerPostConnectEvent;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.plugin.Plugin;
+import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 import net.kyori.adventure.text.Component;
@@ -17,6 +18,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -31,6 +33,7 @@ import org.slf4j.Logger;
 public class ProxyInstance {
     private final Logger logger;
     private final ProxyServer proxy;
+    private final Path dataDirectory;
 
     String defaultServer;
     String kickText;
@@ -57,9 +60,11 @@ public class ProxyInstance {
     }
 
     @Inject
-    public ProxyInstance(ProxyServer proxy, Logger logger) {
+    public ProxyInstance(ProxyServer proxy, Logger logger, @DataDirectory Path dataDirectory) {
         this.proxy = proxy;
         this.logger = logger;
+
+        this.dataDirectory = dataDirectory;
         ProxyInstance.instance = this;
 
         logger.info("TVC-Proxy Loaded!");
@@ -67,6 +72,10 @@ public class ProxyInstance {
 
     public static ProxyInstance getInstance() {
         return instance;
+    }
+
+    public static Path getDataDirectory() {
+        return instance.dataDirectory;
     }
 
     @Subscribe
