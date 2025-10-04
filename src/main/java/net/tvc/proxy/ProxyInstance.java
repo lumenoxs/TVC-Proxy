@@ -1,4 +1,4 @@
-package org.la1m1evelocity.velocitypersistent;
+package net.tvc.proxy;
 
 import com.google.inject.Inject;
 import com.velocitypowered.api.event.player.KickedFromServerEvent;
@@ -11,20 +11,27 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 
-import java.io.*;
-import java.util.*;
+
+
 @SuppressWarnings("ResultOfMethodCallIgnored")
 @Plugin(
     id = "TVCProxy",
     name = "TVCProxy",
     version = "1.1"
 )
-public class VelocityPersistent {
-    @Getter
+public class ProxyInstance {
     private final Logger logger;
-    @Getter
     private final ProxyServer proxy;
 
     String defaultServer;
@@ -34,7 +41,7 @@ public class VelocityPersistent {
     public void onProxyInitialization(ProxyInitializeEvent event) throws IOException {
         new File("PersistentServerData/").mkdirs();
         String [] configData;
-        configData = ConfigHandle.cfgHandle();
+        configData = ConfigHandler.cfghandle();
         this.defaultServer = configData[0];
         this.kickText = configData[1];
         logger.info("Default server: " + defaultServer);
@@ -42,7 +49,7 @@ public class VelocityPersistent {
     }
 
     @Inject
-    public VelocityPersistent(ProxyServer proxy, Logger logger) {
+    public ProxyInstance(ProxyServer proxy, Logger logger) {
         this.proxy = proxy;
         this.logger = logger;
 
