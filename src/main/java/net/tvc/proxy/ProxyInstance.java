@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -36,15 +37,22 @@ public class ProxyInstance {
 
     public static ProxyInstance instance;
 
+    @SuppressWarnings("unchecked")
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) throws IOException {
         new File("PersistentServerData/").mkdirs();
-        String [] configData;
-        configData = ConfigHandler.cfgHandle();
-        this.defaultServer = configData[0];
-        this.kickText = configData[1];
+        Object[] rawConfig = ConfigHandler.getConfig();
+
+        String[] config = (String[]) rawConfig[0];
+        this.defaultServer = config[0];
+        this.kickText = config[1];
+        
+        HashMap<String, String> forcedHosts = (HashMap<String, String>) rawConfig[1];
+
         logger.info("Default server: " + defaultServer);
         logger.info("Kick message: " + kickText);
+        logger.info("Forced hosts: " + forcedHosts.toString());
+        logger.info("TVC-Proxy Initialized!");
     }
 
     @Inject

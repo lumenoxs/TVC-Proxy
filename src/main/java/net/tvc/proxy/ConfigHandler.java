@@ -11,7 +11,7 @@ import java.util.Map;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class ConfigHandler {
-    public static Object[] cfgHandle() throws IOException {
+    public static Object[] getConfig() throws IOException {
         new File("plugins/VelocityPersistent/").mkdirs();
         File configPath = new File("/plugins/VelocityPersistent/config.json");
         Object[] config = new Object[2];
