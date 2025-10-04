@@ -24,9 +24,9 @@ import org.slf4j.Logger;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 @Plugin(
-    id = "TVCProxy",
-    name = "TVCProxy",
-    version = "1.1"
+    id = "tvc-proxy",
+    name = "TVC-Proxy",
+    version = "1.1.1"
 )
 public class ProxyInstance {
     private final Logger logger;

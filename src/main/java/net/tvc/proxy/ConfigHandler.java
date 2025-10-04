@@ -15,20 +15,15 @@ public class ConfigHandler {
         new File("plugins/VelocityPersistent/").mkdirs();
         File configPath = new File("/plugins/VelocityPersistent/config.json");
         Object[] config = new Object[2];
-        if (!configPath.exists()) {
-            configWrite(configPath);
-            config[0] = "0";
-            config[1] = "0";
-            return config;
-        }
+        if (!configPath.exists()) configWrite(configPath);
         config = configRead(configPath);
 
         return config;
     }
 
     public static void configWrite(File configPath) throws IOException {
-        FileWriter fileWriter = new FileWriter(configPath);
-        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+        configPath.createNewFile();
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(configPath));
         bufferedWriter.write(
             "// New players will connect to this server\n" +
             "default_server:windfall\n" +
