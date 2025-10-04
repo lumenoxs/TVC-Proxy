@@ -127,8 +127,7 @@ public class ProxyInstance {
     public void PostConnect(ServerPostConnectEvent event) throws IOException {
         String UUID = (event.getPlayer().getUniqueId().toString());
         File lastServer = new File("PersistentServerData/"+UUID+".txt");
-        FileWriter fileWriter = new FileWriter(lastServer);
-        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(lastServer));
         bufferedWriter.write(String.valueOf(event.getPlayer().getCurrentServer()).split("> ")[1].split("]")[0]);
         bufferedWriter.close();
     }
