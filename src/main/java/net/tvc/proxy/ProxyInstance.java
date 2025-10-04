@@ -46,7 +46,7 @@ public class ProxyInstance {
         String[] config = (String[]) rawConfig[0];
         this.defaultServer = config[0];
         this.kickText = config[1];
-        
+
         HashMap<String, String> forcedHosts = (HashMap<String, String>) rawConfig[1];
 
         logger.info("Default server: " + defaultServer);
@@ -70,36 +70,56 @@ public class ProxyInstance {
 
     @Subscribe
     public void preConnectEvent(PlayerChooseInitialServerEvent event) throws IOException {
+        // this is the only function that ill be commenting as i myself dont understand it so dont get used to it
+        
+        // player uuid
         String UUID = (event.getPlayer().getUniqueId().toString());
-
+        
+        // folder storing player data
         File dataDir = new File("PersistentServerData");
-        if (!dataDir.exists()) {
-            dataDir.mkdirs();
-        }
+        // if it doesnt exist create it
+        if (!dataDir.exists()) dataDir.mkdirs();
 
-        File lastServer = new File("PersistentServerData/"+UUID+".txt");
-        String targetServer;
-        if (!lastServer.exists()) {
-            FileWriter fileWriter = new FileWriter(lastServer);
-            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+        // the file storing the players last server
+        File playerDataFile = new File("PersistentServerData/"+UUID+".txt");
+        // server to connect the player to
+        String targetServerName;
+
+        // if file doesnt exist (new player)
+        if (!playerDataFile.exists()) {
+            // idk how this works something to do with writing to files ask La1m1e on github
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(playerDataFile));
+            // write the default server to the file
             bufferedWriter.write(defaultServer);
+            // close the writer
             bufferedWriter.close();
-            targetServer = defaultServer;
-        }
-        else {
-            FileReader fileReader = new FileReader(lastServer);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-            targetServer = bufferedReader.readLine();
+            // set the target server to the default server
+            targetServerName = defaultServer;
+            logger.info("This is the first time the player " + event.getPlayer().getUsername() + " connects!");
+            logger.info("Defaulting to " + defaultServer + "...");
+        } else {
+            // player has already connected before
+            // magic!1!!111!
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(playerDataFile));
+            // get the last server from the file
+            targetServerName = bufferedReader.readLine();
+            // close the reader
             bufferedReader.close();
-            if (targetServer == null || targetServer.isBlank()) {
-                targetServer = defaultServer;
+            // if for whatever reason its empty, set target server to default server
+            if (targetServerName == null || targetServerName.isBlank()) {
+                targetServerName = defaultServer;
+                logger.info("The player " + event.getPlayer().getUsername() + " had an empty/null data file.");
+                logger.info("Falling back to " + defaultServer + "...");
             }
         }
-        Optional<RegisteredServer> target = proxy.getServer(targetServer);
-        if (target.isPresent()) {
-            event.setInitialServer(target.get());
+        // get the target server from the target server name
+        Optional<RegisteredServer> targetServer = proxy.getServer(targetServerName);
+        // if the server exists
+        if (targetServer.isPresent()) {
+            event.setInitialServer(targetServer.get());
         } else {
-            logger.info(event.getPlayer().getUsername() + " failed to connect to " + targetServer  + " (server didnt exist)");
+            // server didnt exist :(
+            logger.info(event.getPlayer().getUsername() + " failed to connect to " + targetServerName  + " (server didnt exist)");
             logger.info("Falling back to " + defaultServer + "...");
         }
     }
