@@ -97,7 +97,7 @@ public class ProxyInstance {
                 // get the server name from the config
                 String forcedServerName = forcedHosts.get(host);
                 // if the server doesnt equal default (so it doesnt need to connect to the last server)
-                if (forcedServerName != "default") {
+                if (!forcedServerName.equals("default")) {
                     // get the server from the server name
                     Optional<RegisteredServer> forcedServer = proxy.getServer(forcedServerName);
                     // if the server exists
@@ -112,6 +112,9 @@ public class ProxyInstance {
                         // let the rest of the code handle it
                     }
                 }
+            } else {
+                // host wasnt in the config
+                logger.info("Player " + event.getPlayer().getUsername() + " connected with forced host " + host);
             }
         });
 
