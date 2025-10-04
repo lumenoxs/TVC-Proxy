@@ -28,7 +28,7 @@ import org.slf4j.Logger;
 @Plugin(
     id = "tvc-proxy",
     name = "TVC-Proxy",
-    version = "1.1.2"
+    version = "1.1.3"
 )
 public class ProxyInstance {
     private final Logger logger;
@@ -181,15 +181,17 @@ public class ProxyInstance {
     public void onPlayerKicked(KickedFromServerEvent event) {
         Optional<Component> serverKickReason = event.getServerKickReason();
 
-        String serverKickReasonString = serverKickReason.get().toString();
+        String serverKickReasonString;
+
+        if (serverKickReason.isPresent()) {
+            serverKickReasonString = serverKickReason.get().toString();
+        } else {
+            serverKickReasonString = "The server is currently down.";
+        }
 
         String kickMessage = kickText.replace("%server%", event.getServer().getServerInfo().getName());
 
-        if (serverKickReason.isPresent()) {
-            kickMessage = kickMessage.replace("%reason%", serverKickReasonString);
-        } else {
-            kickMessage = kickMessage.replace("%reason%", "The server is currently down.");
-        }
+        kickMessage = kickMessage.replace("%reason%", serverKickReasonString);
         
         event.getPlayer().disconnect(Component.text(kickMessage));
     }
