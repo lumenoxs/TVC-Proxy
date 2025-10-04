@@ -120,7 +120,6 @@ public class ProxyInstance {
         } else {
             // server didnt exist :(
             logger.info(event.getPlayer().getUsername() + " failed to connect to " + targetServerName  + " (server didnt exist)");
-            logger.info("Falling back to " + defaultServer + "...");
         }
     }
 
