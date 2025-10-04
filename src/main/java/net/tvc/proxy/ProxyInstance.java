@@ -28,7 +28,7 @@ import org.slf4j.Logger;
 @Plugin(
     id = "tvc-proxy",
     name = "TVC-Proxy",
-    version = "1.1.1"
+    version = "1.1.2"
 )
 public class ProxyInstance {
     private final Logger logger;

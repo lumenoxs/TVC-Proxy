@@ -50,9 +50,11 @@ public class ConfigHandler {
         while ((line = bufferedReader.readLine()) != null) {
             if (line.startsWith("//")) continue;
             if (line.startsWith("forced_host_")) forcedHosts.put(line.split(":", 2)[0].replace("forced_host_",""), line.split(":", 2)[1]);
-            String value = line.split(":", 2)[1];
-            config[i] = value;
-            i++;
+            else {
+                String value = line.split(":", 2)[1];
+                config[i] = value;
+                i++;
+            }
         }
         bufferedReader.close();
         return new Object[]{config, forcedHosts};
