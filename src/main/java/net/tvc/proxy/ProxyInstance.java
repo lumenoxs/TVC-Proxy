@@ -34,6 +34,7 @@ public class ProxyInstance {
 
     String defaultServer;
     String kickText;
+    HashMap<String, String> forcedHosts;
 
     public static ProxyInstance instance;
 
@@ -47,7 +48,7 @@ public class ProxyInstance {
         this.defaultServer = config[0];
         this.kickText = config[1];
 
-        HashMap<String, String> forcedHosts = (HashMap<String, String>) rawConfig[1];
+        this.forcedHosts = (HashMap<String, String>) rawConfig[1];
 
         logger.info("Default server: " + defaultServer);
         logger.info("Kick message: " + kickText);
@@ -72,6 +73,33 @@ public class ProxyInstance {
     public void preConnectEvent(PlayerChooseInitialServerEvent event) throws IOException {
         // this is the only function that ill be commenting as i myself dont understand it so dont get used to it
         
+        // forced hosts
+        event.getPlayer().getVirtualHost().ifPresent(address -> {
+            // the host the player connected with
+            String host = address.getHostString().toLowerCase();
+            // if the forced host is in the config
+            if (forcedHosts.containsKey(host)) {
+                // get the server name from the config
+                String forcedServerName = forcedHosts.get(host);
+                // if the server doesnt equal default (so it doesnt need to connect to the last server)
+                if (forcedServerName != "default") {
+                    // get the server from the server name
+                    Optional<RegisteredServer> forcedServer = proxy.getServer(forcedServerName);
+                    // if the server exists
+                    if (forcedServer.isPresent()) {
+                        event.setInitialServer(forcedServer.get());
+                        logger.info("Player " + event.getPlayer().getUsername() + " connected using forced host " + host + " to server " + forcedServerName);
+                        return;
+                    } else {
+                        // server didnt exist :(
+                        logger.info("Player " + event.getPlayer().getUsername() + " tried to connect using forced host " + host + " to server " + forcedServerName + ", but the server didnt exist");
+                        // let the rest of the code handle it
+                    }
+                }
+            }
+        });
+
+
         // player uuid
         String UUID = (event.getPlayer().getUniqueId().toString());
         
@@ -116,6 +144,7 @@ public class ProxyInstance {
         Optional<RegisteredServer> targetServer = proxy.getServer(targetServerName);
         // if the server exists
         if (targetServer.isPresent()) {
+            logger.info("Connecting " + event.getPlayer().getUsername() + " to " + targetServerName + "...");
             event.setInitialServer(targetServer.get());
         } else {
             // server didnt exist :(
