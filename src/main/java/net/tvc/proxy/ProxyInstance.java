@@ -9,7 +9,6 @@ import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
-import lombok.Getter;
 import net.kyori.adventure.text.Component;
 
 import java.io.BufferedReader;
@@ -21,8 +20,6 @@ import java.io.IOException;
 import java.util.Optional;
 
 import org.slf4j.Logger;
-
-
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 @Plugin(
@@ -37,11 +34,13 @@ public class ProxyInstance {
     String defaultServer;
     String kickText;
 
+    public static ProxyInstance instance;
+
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) throws IOException {
         new File("PersistentServerData/").mkdirs();
         String [] configData;
-        configData = ConfigHandler.cfghandle();
+        configData = ConfigHandler.cfgHandle();
         this.defaultServer = configData[0];
         this.kickText = configData[1];
         logger.info("Default server: " + defaultServer);
@@ -52,8 +51,13 @@ public class ProxyInstance {
     public ProxyInstance(ProxyServer proxy, Logger logger) {
         this.proxy = proxy;
         this.logger = logger;
+        ProxyInstance.instance = this;
 
         logger.info("TVC-Proxy Loaded!");
+    }
+
+    public static ProxyInstance getInstance() {
+        return instance;
     }
 
     @Subscribe
