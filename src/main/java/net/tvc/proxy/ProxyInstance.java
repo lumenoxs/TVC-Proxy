@@ -178,7 +178,7 @@ public class ProxyInstance {
     }
 
     @Subscribe
-    public void onKickedFromServer(KickedFromServerEvent event) {
+    public void onPlayerKicked(KickedFromServerEvent event) {
         Optional<Component> serverKickReason = event.getServerKickReason();
 
         String serverKickReasonString = serverKickReason.get().toString();
