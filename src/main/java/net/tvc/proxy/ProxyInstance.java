@@ -38,6 +38,7 @@ public class ProxyInstance {
 
     String defaultServer;
     String kickText;
+    String fallbackServer;
     HashMap<String, String> forcedHosts;
 
     public static ProxyInstance instance;
@@ -51,11 +52,13 @@ public class ProxyInstance {
         String[] config = (String[]) rawConfig[0];
         this.defaultServer = config[0];
         this.kickText = config[1];
+        this.fallbackServer = config[2];
 
         this.forcedHosts = (HashMap<String, String>) rawConfig[1];
 
         logger.info("Default server: " + defaultServer);
         logger.info("Kick message: " + kickText);
+        logger.info("Fallback server: " + fallbackServer);
         logger.info("Forced hosts: " + forcedHosts.toString());
         logger.info("TVC-Proxy Initialized!");
     }
@@ -165,7 +168,19 @@ public class ProxyInstance {
         // if the server exists
         else if (targetServer.isPresent()) {
             logger.info("Connecting " + event.getPlayer().getUsername() + " to " + targetServerName[0] + "...");
-            event.setInitialServer(targetServer.get());
+            // if the server is offline
+            if (!isServerOnline(targetServer.get())) {
+                logger.info(targetServerName[0] + " was offline, connecting to fallback server " + fallbackServer + "...");
+
+                targetServer = proxy.getServer(fallbackServer);
+                if (targetServer.isPresent()) {
+                    event.setInitialServer(targetServer.get());
+                } else {
+                    logger.info(event.getPlayer().getUsername() + " failed to connect to " + targetServerName[0]  + " (server didnt exist)");
+                }
+            } else {
+                event.setInitialServer(targetServer.get());
+            }
         // server didnt exist :(
         } else {
             logger.info(event.getPlayer().getUsername() + " failed to connect to " + targetServerName[0]  + " (server didnt exist)");
@@ -179,6 +194,15 @@ public class ProxyInstance {
         BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(lastServer));
         bufferedWriter.write(String.valueOf(event.getPlayer().getCurrentServer()).split("> ")[1].split("]")[0]);
         bufferedWriter.close();
+    }
+
+    public boolean isServerOnline(RegisteredServer server) {
+        try {
+            server.ping().join();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Subscribe
