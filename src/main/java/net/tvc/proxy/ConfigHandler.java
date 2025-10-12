@@ -6,17 +6,16 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class ConfigHandler {
     public static Object[] getConfig() throws IOException {
-        Path dataDirectory = ProxyInstance.getDataDirectory();
-        new File(dataDirectory.toAbsolutePath().toString()).mkdirs();
+        String dataDirectory = ProxyInstance.getDataDirectory().toAbsolutePath().toString();
+        new File(dataDirectory).mkdirs();
         
-        File configPath = new File(dataDirectory.toAbsolutePath().toString()+"/config.json");
+        File configPath = new File(dataDirectory+"/config.json");
         Object[] config = new Object[2];
         if (!configPath.exists()) configWrite(configPath);
         config = configRead(configPath);
@@ -32,6 +31,8 @@ public class ConfigHandler {
             "default_server:windfall\n" +
             "// Message to display on kick when the server they tried to connect to is down. Use %server% to replaced with the server they tried to connect to, and %reason% for the reason\n" +
             "kick_text:Unable to connect to %server%: %reason%\n" +
+            "// Fallback server if the default server is down\n" +
+            "fallback_server:lobby\n" +
             "// Forced hostnames (separate multiple with commas)\n" +
             "forced_host_mc.truevanilla.net:default\n" +
             "forced_host_lobby.truevanilla.net:lobby\n" +
@@ -45,7 +46,7 @@ public class ConfigHandler {
         String line;
         BufferedReader bufferedReader = new BufferedReader(new FileReader(configPath));
         int i = 0;
-        String[] config = new String[2];
+        String[] config = new String[3];
         Map<String, String> forcedHosts = new HashMap<>();
 
         while ((line = bufferedReader.readLine()) != null) {

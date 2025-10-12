@@ -11,6 +11,7 @@ import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -187,7 +188,7 @@ public class ProxyInstance {
         String serverKickReasonString;
 
         if (serverKickReason.isPresent()) {
-            serverKickReasonString = serverKickReason.get().toString();
+            serverKickReasonString = serverKickReason.map(component -> PlainTextComponentSerializer.plainText().serialize(component)).orElse("The server is currently down.");
         } else {
             serverKickReasonString = "The server is currently down.";
         }
