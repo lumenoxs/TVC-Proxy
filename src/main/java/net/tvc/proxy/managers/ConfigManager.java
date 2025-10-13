@@ -1,4 +1,4 @@
-package net.tvc.proxy;
+package net.tvc.proxy.managers;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -9,8 +9,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.tvc.proxy.ProxyInstance;
+
 @SuppressWarnings("ResultOfMethodCallIgnored")
-public class ConfigHandler {
+public class ConfigManager {
     public static Object[] getConfig() throws IOException {
         String dataDirectory = ProxyInstance.getDataDirectory().toAbsolutePath().toString();
         new File(dataDirectory).mkdirs();

@@ -12,6 +12,7 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import net.tvc.proxy.managers.ConfigManager;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -47,7 +48,7 @@ public class ProxyInstance {
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) throws IOException {
         new File("PersistentServerData/").mkdirs();
-        Object[] rawConfig = ConfigHandler.getConfig();
+        Object[] rawConfig = ConfigManager.getConfig();
 
         String[] config = (String[]) rawConfig[0];
         this.defaultServer = config[0];
@@ -76,6 +77,10 @@ public class ProxyInstance {
 
     public static ProxyInstance getInstance() {
         return instance;
+    }
+
+    public static Logger getLogger() {
+        return instance.logger;
     }
 
     public static Path getDataDirectory() {
