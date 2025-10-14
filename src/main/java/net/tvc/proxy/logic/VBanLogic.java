@@ -11,7 +11,6 @@ import java.util.List;
 import net.tvc.proxy.ProxyInstance;
 
 public class VBanLogic {
-    
     public static final String filePath = ProxyInstance.getDataDirectory().toAbsolutePath().toString() + "/vbanned-players.txt";
 
     public static List<String[]> getBanlist() throws IOException {
