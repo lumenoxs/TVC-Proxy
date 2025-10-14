@@ -34,24 +34,24 @@ public final class ServerCommands {
                     if (server.isPresent()) {
                         String serverName = server.get().getServerInfo().getName();
                         if (serverName.equals(commandServerName)) {
-                            source.sendMessage(Component.text("<red>You're already on <gold>"+commandServerName+"</gold>!</red>"));
+                            source.sendMessage(Component.text("<red>You're already on <gold>" + commandServerName + "</gold>!</red>"));
                         } else {
                             Optional<RegisteredServer> target = proxy.getServer(commandServerName);
                             if (target.isPresent()) {
                                 player.createConnectionRequest(target.get()).connect().thenAccept(result -> {
                                     switch (result.getStatus()) {
-                                        case SUCCESS -> source.sendMessage(Component.text("<dark_aqua>Sent you to <gold>"+commandServerName+"</gold> succesfully!</dark_aqua>"));
-                                        case ALREADY_CONNECTED -> source.sendMessage(Component.text("<red>You're already on <gold>"+commandServerName+"</gold>.</red>"));
-                                        case CONNECTION_IN_PROGRESS -> source.sendMessage(Component.text("<aqua>Sending you to <gold>"+commandServerName+"</gold>...</aqua>"));
-                                        default -> source.sendMessage(Component.text("<red>Failed to connect to <gold>"+commandServerName+"</gold>.</red>"));
+                                        case SUCCESS -> source.sendMessage(Component.text("<dark_aqua>Sent you to <gold>" + commandServerName + "</gold> succesfully!</dark_aqua>"));
+                                        case ALREADY_CONNECTED -> source.sendMessage(Component.text("<red>You're already on <gold>" + commandServerName + "</gold>.</red>"));
+                                        case CONNECTION_IN_PROGRESS -> source.sendMessage(Component.text("<aqua>Sending you to <gold>" + commandServerName + "</gold>...</aqua>"));
+                                        default -> source.sendMessage(Component.text("<red>Failed to connect to <gold>" + commandServerName + "</gold>.</red>"));
                                     }
                                 });
                             } else {
-                                logger.info("Server "+commandServerName+" doesn't exist!");
+                                logger.info("Server " + commandServerName + " doesn't exist!");
                             }
                         }
                     } else {
-                        logger.info("Player "+player.getUsername()+" is on a server that doesn't exist???");
+                        logger.info("Player " + player.getUsername() + " is on a server that doesn't exist???");
                     }
                 } else {
                     source.sendMessage(Component.text("<red>You need to be a player to run this command!</red>"));
@@ -75,24 +75,24 @@ public final class ServerCommands {
                     if (server.isPresent()) {
                         String serverName = server.get().getServerInfo().getName();
                         if (serverName.equals(commandServerName)) {
-                            source.sendMessage(Component.text("<red>You're already on <gold>"+commandServerName+"</gold>!</red>"));
+                            source.sendMessage(Component.text("<red>You're already on <gold>" + commandServerName + "</gold>!</red>"));
                         } else {
                             Optional<RegisteredServer> target = proxy.getServer(commandServerName);
                             if (target.isPresent()) {
                                 player.createConnectionRequest(target.get()).connect().thenAccept(result -> {
                                     switch (result.getStatus()) {
-                                        case SUCCESS -> source.sendMessage(Component.text("<dark_aqua>Sent you to <gold>"+commandServerName+"</gold> succesfully!</dark_aqua>"));
-                                        case ALREADY_CONNECTED -> source.sendMessage(Component.text("<red>You're already on <gold>"+commandServerName+"</gold>.</red>"));
-                                        case CONNECTION_IN_PROGRESS -> source.sendMessage(Component.text("<aqua>Sending you to <gold>"+commandServerName+"</gold>...</aqua>"));
-                                        default -> source.sendMessage(Component.text("<red>Failed to connect to <gold>"+commandServerName+"</gold>.</red>"));
+                                        case SUCCESS -> source.sendMessage(Component.text("<dark_aqua>Sent you to <gold>" + commandServerName + "</gold> succesfully!</dark_aqua>"));
+                                        case ALREADY_CONNECTED -> source.sendMessage(Component.text("<red>You're already on <gold>" + commandServerName + "</gold>.</red>"));
+                                        case CONNECTION_IN_PROGRESS -> source.sendMessage(Component.text("<aqua>Sending you to <gold>" + commandServerName + "</gold>...</aqua>"));
+                                        default -> source.sendMessage(Component.text("<red>Failed to connect to <gold>" + commandServerName + "</gold>.</red>"));
                                     }
                                 });
                             } else {
-                                logger.info("Server "+commandServerName+" doesn't exist!");
+                                logger.info("Server " + commandServerName + " doesn't exist!");
                             }
                         }
                     } else {
-                        logger.info("Player "+player.getUsername()+" is on a server that doesn't exist???");
+                        logger.info("Player " + player.getUsername() + " is on a server that doesn't exist???");
                     }
                 } else {
                     source.sendMessage(Component.text("<red>You need to be a player to run this command!</red>"));
@@ -116,24 +116,24 @@ public final class ServerCommands {
                     if (server.isPresent()) {
                         String serverName = server.get().getServerInfo().getName();
                         if (serverName.equals(commandServerName)) {
-                            source.sendMessage(Component.text("<red>You're already on <gold>"+commandServerName+"</gold>!</red>"));
+                            source.sendMessage(Component.text("<red>You're already on <gold>" + commandServerName + "</gold>!</red>"));
                         } else {
                             Optional<RegisteredServer> target = proxy.getServer(commandServerName);
                             if (target.isPresent()) {
                                 player.createConnectionRequest(target.get()).connect().thenAccept(result -> {
                                     switch (result.getStatus()) {
-                                        case SUCCESS -> source.sendMessage(Component.text("<dark_aqua>Sent you to <gold>"+commandServerName+"</gold> succesfully!</dark_aqua>"));
-                                        case ALREADY_CONNECTED -> source.sendMessage(Component.text("<red>You're already on <gold>"+commandServerName+"</gold>.</red>"));
-                                        case CONNECTION_IN_PROGRESS -> source.sendMessage(Component.text("<aqua>Sending you to <gold>"+commandServerName+"</gold>...</aqua>"));
-                                        default -> source.sendMessage(Component.text("<red>Failed to connect to <gold>"+commandServerName+"</gold>.</red>"));
+                                        case SUCCESS -> source.sendMessage(Component.text("<dark_aqua>Sent you to <gold>" + commandServerName + "</gold> succesfully!</dark_aqua>"));
+                                        case ALREADY_CONNECTED -> source.sendMessage(Component.text("<red>You're already on <gold>" + commandServerName + "</gold>.</red>"));
+                                        case CONNECTION_IN_PROGRESS -> source.sendMessage(Component.text("<aqua>Sending you to <gold>" + commandServerName + "</gold>...</aqua>"));
+                                        default -> source.sendMessage(Component.text("<red>Failed to connect to <gold>" + commandServerName + "</gold>.</red>"));
                                     }
                                 });
                             } else {
-                                logger.info("Server "+commandServerName+" doesn't exist!");
+                                logger.info("Server " + commandServerName + " doesn't exist!");
                             }
                         }
                     } else {
-                        logger.info("Player "+player.getUsername()+" is on a server that doesn't exist???");
+                        logger.info("Player " + player.getUsername() + " is on a server that doesn't exist???");
                     }
                 } else {
                     source.sendMessage(Component.text("<red>You need to be a player to run this command!</red>"));
@@ -157,24 +157,24 @@ public final class ServerCommands {
                     if (server.isPresent()) {
                         String serverName = server.get().getServerInfo().getName();
                         if (serverName.equals(commandServerName)) {
-                            source.sendMessage(Component.text("<red>You're already on <gold>"+commandServerName+"</gold>!</red>"));
+                            source.sendMessage(Component.text("<red>You're already on <gold>" + commandServerName + "</gold>!</red>"));
                         } else {
                             Optional<RegisteredServer> target = proxy.getServer(commandServerName);
                             if (target.isPresent()) {
                                 player.createConnectionRequest(target.get()).connect().thenAccept(result -> {
                                     switch (result.getStatus()) {
-                                        case SUCCESS -> source.sendMessage(Component.text("<dark_aqua>Sent you to <gold>"+commandServerName+"</gold> succesfully!</dark_aqua>"));
-                                        case ALREADY_CONNECTED -> source.sendMessage(Component.text("<red>You're already on <gold>"+commandServerName+"</gold>.</red>"));
-                                        case CONNECTION_IN_PROGRESS -> source.sendMessage(Component.text("<aqua>Sending you to <gold>"+commandServerName+"</gold>...</aqua>"));
-                                        default -> source.sendMessage(Component.text("<red>Failed to connect to <gold>"+commandServerName+"</gold>.</red>"));
+                                        case SUCCESS -> source.sendMessage(Component.text("<dark_aqua>Sent you to <gold>" + commandServerName + "</gold> succesfully!</dark_aqua>"));
+                                        case ALREADY_CONNECTED -> source.sendMessage(Component.text("<red>You're already on <gold>" + commandServerName + "</gold>.</red>"));
+                                        case CONNECTION_IN_PROGRESS -> source.sendMessage(Component.text("<aqua>Sending you to <gold>" + commandServerName + "</gold>...</aqua>"));
+                                        default -> source.sendMessage(Component.text("<red>Failed to connect to <gold>" + commandServerName + "</gold>.</red>"));
                                     }
                                 });
                             } else {
-                                logger.info("Server "+commandServerName+" doesn't exist!");
+                                logger.info("Server " + commandServerName + " doesn't exist!");
                             }
                         }
                     } else {
-                        logger.info("Player "+player.getUsername()+" is on a server that doesn't exist???");
+                        logger.info("Player " + player.getUsername() + " is on a server that doesn't exist???");
                     }
                 } else {
                     source.sendMessage(Component.text("<red>You need to be a player to run this command!</red>"));

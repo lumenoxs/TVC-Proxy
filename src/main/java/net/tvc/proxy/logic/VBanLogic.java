@@ -12,7 +12,7 @@ import net.tvc.proxy.ProxyInstance;
 
 public class VBanLogic {
     
-    public static final String filePath = ProxyInstance.getDataDirectory().toAbsolutePath().toString()+"/vbanned-players.txt";
+    public static final String filePath = ProxyInstance.getDataDirectory().toAbsolutePath().toString() + "/vbanned-players.txt";
 
     public static List<String[]> getBanlist() throws IOException {
         List<String[]> banlist = new ArrayList<>();
@@ -37,7 +37,7 @@ public class VBanLogic {
         BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
         StringBuffer inputBuffer = new StringBuffer();
 
-        for (String[] banpair : banlist) inputBuffer.append(banpair[0]+":"+banpair[1]+"\n");
+        for (String[] banpair : banlist) inputBuffer.append(banpair[0] + ":" + banpair[1] + "\n");
 
         writer.write(inputBuffer.toString());
         writer.close();
@@ -69,7 +69,7 @@ public class VBanLogic {
 
     public static void vBan(String playerName, String reason) throws IOException {
         if (reason.equals("")) reason = "You are banned from this proxy!";
-        else reason = "You are banned from this proxy. Reason:\n"+reason;
+        else reason = "You are banned from this proxy. Reason:\n" + reason;
 
         List<String[]> banlist = getBanlist();
         banlist.add(new String[]{playerName, reason});

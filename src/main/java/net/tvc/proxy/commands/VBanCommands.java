@@ -42,7 +42,7 @@ public final class VBanCommands {
                         String reason = context.getArgument("reason", String.class);
                         String playerName = context.getArgument("player", String.class);
                         try {VBanLogic.vBan(playerName, reason);} catch (IOException e) {}
-                        context.getSource().sendMessage(Component.text("<green>Banned the player "+playerName+"!</green>"));
+                        context.getSource().sendMessage(Component.text("<green>Banned the player " + playerName + "!</green>"));
                         return Command.SINGLE_SUCCESS;
                     })
                 )
@@ -71,10 +71,10 @@ public final class VBanCommands {
                     String playerName = context.getArgument("player", String.class);
                     try {
                         if (!VBanLogic.getVBannedPlayers().contains(playerName)) {
-                            context.getSource().sendMessage(Component.text("<red>The player "+playerName+" is not banned!</red>"));
+                            context.getSource().sendMessage(Component.text("<red>The player " + playerName + " is not banned!</red>"));
                         } else {
                             VBanLogic.vPardon(playerName);
-                            context.getSource().sendMessage(Component.text("<green>Pardoned the player "+playerName+"!</green>"));
+                            context.getSource().sendMessage(Component.text("<green>Pardoned the player " + playerName + "!</green>"));
                         }
                     } catch (IOException e) {}
                     return Command.SINGLE_SUCCESS;

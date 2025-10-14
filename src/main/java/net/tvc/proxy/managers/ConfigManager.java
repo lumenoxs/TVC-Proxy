@@ -13,11 +13,11 @@ import net.tvc.proxy.ProxyInstance;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class ConfigManager {
-    public static Object[] getConfig() throws IOException {
+    public Object[] getConfig() throws IOException {
         String dataDirectory = ProxyInstance.getDataDirectory().toAbsolutePath().toString();
         new File(dataDirectory).mkdirs();
         
-        File configPath = new File(dataDirectory+"/config.json");
+        File configPath = new File(dataDirectory + "/config.json");
         Object[] config = new Object[2];
         if (!configPath.exists()) configWrite(configPath);
         config = configRead(configPath);
