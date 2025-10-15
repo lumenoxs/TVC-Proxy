@@ -251,6 +251,8 @@ public class ProxyInstance {
 
         String kickMessage = kickText.replace("%server%", event.getServer().getServerInfo().getName());
 
+        if (serverKickReasonString.equals("multiplayer.disconnect.not_whitelisted")) serverKickReasonString = "You are not whitelisted. Please join our discord (discord.truevanilla.net) to get whitelisted!";
+        
         kickMessage = kickMessage.replace("%reason%", serverKickReasonString);
         
         event.getPlayer().disconnect(Component.text(kickMessage));
