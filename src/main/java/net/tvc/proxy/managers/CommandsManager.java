@@ -9,6 +9,7 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import net.tvc.proxy.commands.InfoCommands;
 import net.tvc.proxy.commands.ServerCommands;
 import net.tvc.proxy.commands.VBanCommands;
+import net.tvc.proxy.commands.VListCommand;
 
 public class CommandsManager {
     private final ProxyServer proxy;
@@ -28,6 +29,8 @@ public class CommandsManager {
         commandManager.register(commandManager.metaBuilder("windfall").plugin(this).build(), ServerCommands.createWindfallCommand(proxy));
         commandManager.register(commandManager.metaBuilder("arena").plugin(this).build(), ServerCommands.createArenaComman(proxy));
         commandManager.register(commandManager.metaBuilder("lobby").aliases("hub").plugin(this).build(), ServerCommands.createLobbyCommand(proxy));
+
+        commandManager.register(commandManager.metaBuilder("vlist").plugin(this).build(), VListCommand.createVListCommand(proxy));
 
         commandManager.register(commandManager.metaBuilder("discord").plugin(this).build(), InfoCommands.createDiscordCommand(proxy));
     }
