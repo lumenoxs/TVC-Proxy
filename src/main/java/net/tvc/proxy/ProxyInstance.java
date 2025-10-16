@@ -70,8 +70,8 @@ public class ProxyInstance {
         Object[] rawConfig = configManager.getConfig();
         String[] config = (String[]) rawConfig[0];
         this.defaultServer = config[0];
-        this.kickText = config[1];
-        this.fallbackServer = config[2];
+        this.fallbackServer = config[1];
+        this.kickText = config[2];
         this.forcedHosts = (HashMap<String, String>) rawConfig[1];
 
         logger.info("Default server: " + defaultServer);
