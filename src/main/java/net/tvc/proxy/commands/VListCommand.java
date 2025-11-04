@@ -29,14 +29,14 @@ public class VListCommand {
                 }
                 
                 StringBuilder message = new StringBuilder("§a=================================\n");
-                message.append("§e§lGlobal: §6").append(proxy.getPlayerCount()).append("§7/§6").append(proxy.getConfiguration().getShowMaxPlayers()).append("§r\n");
+                message.append("§eGlobal: §6").append(proxy.getPlayerCount()).append("§7/§6").append(proxy.getConfiguration().getShowMaxPlayers()).append("§r\n");
                 
                 for (Map.Entry<String, List<String>> entry : serverPlayers.entrySet()) {
-                    message.append("§b§l").append(entry.getKey()).append(":§r §2");
+                    message.append("§b").append(entry.getKey()).append(": §2");
 
                     List<String> players = entry.getValue();
                     if (players.isEmpty()) message.append("§dNo players!");
-                    else message.append(String.join("§7, ", players));
+                    else message.append(String.join("§7, §2", players));
                     message.append("\n");
                 }
                 

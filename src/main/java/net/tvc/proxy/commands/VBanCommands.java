@@ -14,7 +14,7 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import net.kyori.adventure.text.Component;
 
 public final class VBanCommands {
-    public static BrigadierCommand createVBanCommand(final ProxyServer proxy) throws IOException {
+    public static BrigadierCommand createVBanCommand(final ProxyServer proxy) {
         LiteralCommandNode<CommandSource> vBanCommand = BrigadierCommand.literalArgumentBuilder("vban")
             .requires(source -> source.hasPermission("tvc.vban"))
 
@@ -51,7 +51,7 @@ public final class VBanCommands {
         return new BrigadierCommand(vBanCommand);
     }
     
-    public static BrigadierCommand createVPardonCommand(final ProxyServer proxy) throws IOException {
+    public static BrigadierCommand createVPardonCommand(final ProxyServer proxy) {
         LiteralCommandNode<CommandSource> vPardonCommand = BrigadierCommand.literalArgumentBuilder("vpardon")
             .requires(source -> source.hasPermission("tvc.vban"))
 

@@ -35,6 +35,8 @@ public class ConfigManager {
             "kick_text:Unable to connect to %server%: %reason%\n" +
             "// Fallback server if the default server is down\n" +
             "fallback_server:lobby\n" +
+            "// Disconnect message mode, 1, 2 or 3\n" +
+            "disconnect_message_mode:2\n" +
             "// Forced hostnames (separate multiple with commas)\n" +
             "forced_host_mc.truevanilla.net:default\n" +
             "forced_host_lobby.truevanilla.net:lobby\n" +
@@ -48,7 +50,7 @@ public class ConfigManager {
         String line;
         BufferedReader bufferedReader = new BufferedReader(new FileReader(configPath));
         int i = 0;
-        String[] config = new String[3];
+        String[] config = new String[4];
         Map<String, String> forcedHosts = new HashMap<>();
 
         while ((line = bufferedReader.readLine()) != null) {

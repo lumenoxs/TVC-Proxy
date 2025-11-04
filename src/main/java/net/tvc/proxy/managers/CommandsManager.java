@@ -1,7 +1,5 @@
 package net.tvc.proxy.managers;
 
-import java.io.IOException;
-
 import com.google.inject.Inject;
 import com.velocitypowered.api.command.CommandManager;
 import com.velocitypowered.api.proxy.ProxyServer;
@@ -20,7 +18,7 @@ public class CommandsManager {
         this.proxy = proxy;
     }
 
-    public void registerCommands() throws IOException {
+    public void registerCommands() {
         CommandManager commandManager = proxy.getCommandManager();
         ProxyInstance pluginInst = ProxyInstance.getInstance();
 

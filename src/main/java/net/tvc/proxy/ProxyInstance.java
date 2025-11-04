@@ -19,6 +19,7 @@ import com.velocitypowered.api.proxy.server.RegisteredServer;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import net.kyori.adventure.translation.GlobalTranslator;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -28,6 +29,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -36,7 +38,7 @@ import org.slf4j.Logger;
 @Plugin(
     id = "tvc-proxy",
     name = "TVC-Proxy",
-    version = "1.2.1"
+    version = "1.2.2"
 )
 public class ProxyInstance {
     private final Logger logger;
@@ -49,6 +51,7 @@ public class ProxyInstance {
     String defaultServer;
     String kickText;
     String fallbackServer;
+    Integer kickMessageMode;
     HashMap<String, String> forcedHosts;
 
     public static ProxyInstance instance;
@@ -72,6 +75,7 @@ public class ProxyInstance {
         this.defaultServer = config[0];
         this.fallbackServer = config[1];
         this.kickText = config[2];
+        this.kickMessageMode = Integer.parseInt(config[3]);
         this.forcedHosts = (HashMap<String, String>) rawConfig[1];
 
         logger.info("Default server: " + defaultServer);
@@ -242,9 +246,30 @@ public class ProxyInstance {
         Optional<Component> serverKickReason = event.getServerKickReason();
 
         String serverKickReasonString;
+        String serverKickReasonString1;
+        String serverKickReasonString2;
+        String serverKickReasonString3;
 
         if (serverKickReason.isPresent()) {
-            serverKickReasonString = serverKickReason.map(component -> PlainTextComponentSerializer.plainText().serialize(component)).orElse("The server is currently down.");
+            serverKickReasonString1 = serverKickReason.get().toString();
+            if (serverKickReasonString1.equals("")) serverKickReasonString = "The server is currently down.";
+            serverKickReasonString2 = PlainTextComponentSerializer.plainText()
+                .serialize(GlobalTranslator.render(serverKickReason.get(), Locale.ENGLISH));
+            serverKickReasonString3 = serverKickReason
+                .map(component -> PlainTextComponentSerializer.plainText()
+                    .serialize(GlobalTranslator.render(component, Locale.ENGLISH)))
+                .orElse("No reason provided");
+
+            if (this.kickMessageMode == 1) {
+                serverKickReasonString = serverKickReasonString1;
+            } else if (this.kickMessageMode == 2) {
+                serverKickReasonString = serverKickReasonString2;
+            } else if (this.kickMessageMode == 3) {
+                serverKickReasonString = serverKickReasonString3;
+            } else {
+                serverKickReasonString = "Whoops! Something went wrong. Please alert RPiCPU on Discord.";
+                logger.info("Invalid kick mode set in config: " + this.kickMessageMode);
+            }
         } else {
             serverKickReasonString = "The server is currently down.";
         }
