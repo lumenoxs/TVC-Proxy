@@ -6,6 +6,7 @@ import com.velocitypowered.api.proxy.ProxyServer;
 
 import net.tvc.proxy.ProxyInstance;
 import net.tvc.proxy.commands.InfoCommands;
+import net.tvc.proxy.commands.SendAllCommand;
 import net.tvc.proxy.commands.ServerCommands;
 import net.tvc.proxy.commands.VBanCommands;
 import net.tvc.proxy.commands.VListCommand;
@@ -27,11 +28,13 @@ public class CommandsManager {
         
         commandManager.register(commandManager.metaBuilder("core").plugin(pluginInst).build(), ServerCommands.createCoreCommand(proxy));
         commandManager.register(commandManager.metaBuilder("windfall").plugin(pluginInst).build(), ServerCommands.createWindfallCommand(proxy));
-        commandManager.register(commandManager.metaBuilder("arena").plugin(pluginInst).build(), ServerCommands.createArenaComman(proxy));
+        commandManager.register(commandManager.metaBuilder("arena").plugin(pluginInst).build(), ServerCommands.createArenaCommand(proxy));
         commandManager.register(commandManager.metaBuilder("lobby").aliases("hub").plugin(pluginInst).build(), ServerCommands.createLobbyCommand(proxy));
 
         commandManager.register(commandManager.metaBuilder("vlist").plugin(pluginInst).build(), VListCommand.createVListCommand(proxy));
 
         commandManager.register(commandManager.metaBuilder("discord").plugin(pluginInst).build(), InfoCommands.createDiscordCommand(proxy));
+    
+        commandManager.register(commandManager.metaBuilder("sendall").plugin(pluginInst).build(), SendAllCommand.createSendAllCommand(proxy));
     }
 }

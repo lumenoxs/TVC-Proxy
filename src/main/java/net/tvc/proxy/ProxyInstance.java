@@ -18,6 +18,7 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.kyori.adventure.translation.GlobalTranslator;
 
@@ -27,7 +28,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+
 import java.nio.file.Path;
+
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Optional;
@@ -38,7 +41,7 @@ import org.slf4j.Logger;
 @Plugin(
     id = "tvc-proxy",
     name = "TVC-Proxy",
-    version = "1.2.2"
+    version = "1.2.3"
 )
 public class ProxyInstance {
     private final Logger logger;
@@ -52,7 +55,7 @@ public class ProxyInstance {
     String kickText;
     String fallbackServer;
     Integer kickMessageMode;
-    HashMap<String, String> forcedHosts;
+    HashMap<String, String> forcedHosts = new HashMap<>();
 
     public static ProxyInstance instance;
 
@@ -210,6 +213,7 @@ public class ProxyInstance {
 
                 targetServer = proxy.getServer(fallbackServer);
                 if (targetServer.isPresent()) {
+                    player.sendMessage(MiniMessage.miniMessage().deserialize("<yellow>" + player.getUsername() + " has joined " + targetServerName + "</yellow>"));
                     event.setInitialServer(targetServer.get());
                 } else {
                     logger.info(player.getUsername() + " failed to connect to " + targetServerName[0]  + " (server didnt exist)");
@@ -258,7 +262,7 @@ public class ProxyInstance {
             serverKickReasonString3 = serverKickReason
                 .map(component -> PlainTextComponentSerializer.plainText()
                     .serialize(GlobalTranslator.render(component, Locale.ENGLISH)))
-                .orElse("No reason provided");
+                .orElse("The server is currently down.");
 
             if (this.kickMessageMode == 1) {
                 serverKickReasonString = serverKickReasonString1;
@@ -276,8 +280,6 @@ public class ProxyInstance {
 
         String kickMessage = kickText.replace("%server%", event.getServer().getServerInfo().getName());
 
-        if (serverKickReasonString.equals("multiplayer.disconnect.not_whitelisted")) serverKickReasonString = "You are not whitelisted. Please join our discord (discord.truevanilla.net) to get whitelisted!";
-        
         kickMessage = kickMessage.replace("%reason%", serverKickReasonString);
         
         event.getPlayer().disconnect(Component.text(kickMessage));

@@ -9,12 +9,12 @@ import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 
+import net.kyori.adventure.text.minimessage.MiniMessage;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import net.kyori.adventure.text.Component;
 
 public class VListCommand {
     public static BrigadierCommand createVListCommand(final ProxyServer proxy) {
@@ -28,20 +28,20 @@ public class VListCommand {
                     serverPlayers.put(registeredServer.getServerInfo().getName(), players);
                 }
                 
-                StringBuilder message = new StringBuilder("§a=================================\n");
-                message.append("§eGlobal: §6").append(proxy.getPlayerCount()).append("§7/§6").append(proxy.getConfiguration().getShowMaxPlayers()).append("§r\n");
+                StringBuilder message = new StringBuilder("<green>=================================</green>\n");
+                message.append("<dark_aqua>Global:</dark_aqua> <gold>").append(proxy.getPlayerCount()).append("</gold><gray>/</gray><gold>").append(proxy.getConfiguration().getShowMaxPlayers()).append("</gold>\n");
                 
                 for (Map.Entry<String, List<String>> entry : serverPlayers.entrySet()) {
-                    message.append("§b").append(entry.getKey()).append(": §2");
+                    message.append("<aqua>").append(entry.getKey()).append(":</aqua> <dark_green>");
 
                     List<String> players = entry.getValue();
-                    if (players.isEmpty()) message.append("§dNo players!");
-                    else message.append(String.join("§7, §2", players));
-                    message.append("\n");
+                    if (players.isEmpty()) message.append("</dark_green><light_purple>No players!</light_purple><dark_green>");
+                    else message.append(String.join("</dark_green><gray>,</gray> <dark_green>", players));
+                    message.append("</dark_green>\n");
                 }
                 
-                message.append("§a=================================");
-                source.sendMessage(Component.text(message.toString()));
+                message.append("<green>=================================</green>");
+                source.sendMessage(MiniMessage.miniMessage().deserialize(message.toString()));
                 return Command.SINGLE_SUCCESS;
             })
             .build();
