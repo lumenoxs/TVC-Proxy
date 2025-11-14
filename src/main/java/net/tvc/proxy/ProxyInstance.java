@@ -28,7 +28,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-
 import java.nio.file.Path;
 
 import java.util.HashMap;
@@ -41,7 +40,7 @@ import org.slf4j.Logger;
 @Plugin(
     id = "tvc-proxy",
     name = "TVC-Proxy",
-    version = "1.2.3"
+    version = "1.2.4"
 )
 public class ProxyInstance {
     private final Logger logger;
@@ -229,6 +228,13 @@ public class ProxyInstance {
 
     @Subscribe
     public void PostConnect(ServerPostConnectEvent event) throws IOException {
+        Integer pVer = event.getPlayer().getProtocolVersion().getProtocol();
+        if (pVer < 773 && pVer >= 769) {
+            event.getPlayer().sendMessage(MiniMessage.miniMessage().deserialize("<red>Your Minecraft version has issues with our servers. You may get kicked for particles/fall damage. To fix this, play 1.21.9 or 1.21.4.</red>"));
+        } else if (pVer < 763) {
+            event.getPlayer().sendMessage(MiniMessage.miniMessage().deserialize("<red>You are using a very outdated version of Minecraft that we do not support. Any issues will be disregarded.</red>"));;
+        }
+
         String UUID = (event.getPlayer().getUniqueId().toString());
         File lastServer = new File("PersistentServerData/" + UUID + ".txt");
         BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(lastServer));
@@ -282,6 +288,7 @@ public class ProxyInstance {
 
         kickMessage = kickMessage.replace("%reason%", serverKickReasonString);
         
-        event.getPlayer().disconnect(Component.text(kickMessage));
+        event.setResult(KickedFromServerEvent.RedirectPlayer.create(proxy.getServer("lobby").get()));
+        event.getPlayer().sendMessage(MiniMessage.miniMessage().deserialize(kickMessage));
     }
 }
