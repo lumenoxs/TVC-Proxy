@@ -29,7 +29,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
-
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Optional;
@@ -40,7 +39,7 @@ import org.slf4j.Logger;
 @Plugin(
     id = "tvc-proxy",
     name = "TVC-Proxy",
-    version = "1.2.4"
+    version = "1.2.2"
 )
 public class ProxyInstance {
     private final Logger logger;
@@ -115,11 +114,18 @@ public class ProxyInstance {
     @Subscribe
     public void preConnectEvent(PlayerChooseInitialServerEvent event) throws IOException {
         // this is the only function that ill be commenting as i myself dont understand it so dont get used to it
-
         Player player = event.getPlayer();
 
-        if (VBanLogic.isVBanned(player.getUsername())) {
-            player.disconnect(Component.text(VBanLogic.getBanReason(player.getUsername())));
+        // ban checks
+        String pUUID = player.getUniqueId().toString();
+        if (VBanLogic.isVBanned("PLAYER", pUUID)) {
+            player.disconnect(MiniMessage.miniMessage().deserialize(VBanLogic.getBanReason("PLAYER", pUUID)));
+            return;
+        }
+
+        String pIP = player.getRemoteAddress().getAddress().getHostAddress();
+        if (VBanLogic.isVBanned("IP", pIP)) {
+            player.disconnect(MiniMessage.miniMessage().deserialize(VBanLogic.getBanReason("IP", pIP)));
             return;
         }
         
@@ -212,7 +218,6 @@ public class ProxyInstance {
 
                 targetServer = proxy.getServer(fallbackServer);
                 if (targetServer.isPresent()) {
-                    player.sendMessage(MiniMessage.miniMessage().deserialize("<yellow>" + player.getUsername() + " has joined " + targetServerName + "</yellow>"));
                     event.setInitialServer(targetServer.get());
                 } else {
                     logger.info(player.getUsername() + " failed to connect to " + targetServerName[0]  + " (server didnt exist)");
@@ -228,13 +233,6 @@ public class ProxyInstance {
 
     @Subscribe
     public void PostConnect(ServerPostConnectEvent event) throws IOException {
-        Integer pVer = event.getPlayer().getProtocolVersion().getProtocol();
-        if (pVer < 773 && pVer >= 769) {
-            event.getPlayer().sendMessage(MiniMessage.miniMessage().deserialize("<red>Your Minecraft version has issues with our servers. You may get kicked for particles/fall damage. To fix this, play 1.21.9 or 1.21.4.</red>"));
-        } else if (pVer < 763) {
-            event.getPlayer().sendMessage(MiniMessage.miniMessage().deserialize("<red>You are using a very outdated version of Minecraft that we do not support. Any issues will be disregarded.</red>"));;
-        }
-
         String UUID = (event.getPlayer().getUniqueId().toString());
         File lastServer = new File("PersistentServerData/" + UUID + ".txt");
         BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(lastServer));
@@ -268,7 +266,7 @@ public class ProxyInstance {
             serverKickReasonString3 = serverKickReason
                 .map(component -> PlainTextComponentSerializer.plainText()
                     .serialize(GlobalTranslator.render(component, Locale.ENGLISH)))
-                .orElse("The server is currently down.");
+                .orElse("No reason provided");
 
             if (this.kickMessageMode == 1) {
                 serverKickReasonString = serverKickReasonString1;
@@ -286,9 +284,10 @@ public class ProxyInstance {
 
         String kickMessage = kickText.replace("%server%", event.getServer().getServerInfo().getName());
 
+        if (serverKickReasonString.equals("multiplayer.disconnect.not_whitelisted")) serverKickReasonString = "You are not whitelisted. Please join our discord (discord.truevanilla.net) to get whitelisted!";
+        
         kickMessage = kickMessage.replace("%reason%", serverKickReasonString);
         
-        event.setResult(KickedFromServerEvent.RedirectPlayer.create(proxy.getServer("lobby").get()));
-        event.getPlayer().sendMessage(MiniMessage.miniMessage().deserialize(kickMessage));
+        event.getPlayer().disconnect(MiniMessage.miniMessage().deserialize(kickMessage));
     }
 }
